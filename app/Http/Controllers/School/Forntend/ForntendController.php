@@ -16,7 +16,7 @@ class ForntendController extends Controller
                ->leftJoin('students','students.id','results.student_id')
                ->leftJoin('departments','departments.id','students.department_id')
                ->select('students.name','results.id','departments.department_name','results.gpa')
-               ->orderBy( 'id','asc')
+               ->orderBy('results.gpa', 'desc')
                ->get();
         return response()->json(
             [
@@ -26,19 +26,23 @@ class ForntendController extends Controller
         ]);
     }
 
-    public function Students(){
+    public function Students()
+    {
         $students = DB::table('students');
         $students = $students
-               ->join('results','results.student_id','=','students.id')
-               ->leftJoin('departments','departments.id','students.department_id')
-               ->select('students.name','students.id','departments.department_name','results.gpa')
-               ->orderBy( 'id','asc')
-               ->get();
-               return response()->json(
-                [
-                    'students' => $students,
-                    'message' => 'Students',
-                    'code' => 200
-            ]);
+            ->join('results', 'results.student_id', '=', 'students.id')
+            ->leftJoin('departments', 'departments.id', '=', 'students.department_id')
+            ->select('students.name', 'students.id', 'departments.department_name', 'results.gpa')
+            ->orderBy('results.gpa', 'desc')
+            ->get();
+            
+        return response()->json(
+            [
+                'students' => $students,
+                'message' => 'Students',
+                'code' => 200
+            ]
+        );
     }
+    
 }
